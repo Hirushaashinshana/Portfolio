@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
+import { Theme } from "../types";
 
-export default function InteractiveBackground() {
+interface InteractiveBackgroundProps {
+  theme: Theme;
+}
+
+export default function InteractiveBackground({ theme }: InteractiveBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -90,8 +95,8 @@ export default function InteractiveBackground() {
       draw(c: CanvasRenderingContext2D) {
         c.beginPath();
         c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        // Fixed opacity for beautiful dark theme
-        const opacity = "0.3";
+        // Toggle opacity based on theme
+        const opacity = theme === "dark" ? "0.3" : "0.22";
         c.fillStyle = `rgba(${this.color}, ${opacity})`;
         c.fill();
       }
@@ -109,7 +114,7 @@ export default function InteractiveBackground() {
 
       // Draw subtle grid first
       const gridSize = 60;
-      ctx.strokeStyle = "rgba(30, 41, 59, 0.25)";
+      ctx.strokeStyle = theme === "dark" ? "rgba(30, 41, 59, 0.25)" : "rgba(148, 163, 184, 0.12)";
       ctx.lineWidth = 1;
       
       // Draw Grid Mesh
@@ -143,7 +148,7 @@ export default function InteractiveBackground() {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            const lineOpacity = (1 - dist / 120) * 0.08;
+            const lineOpacity = (1 - dist / 120) * (theme === "dark" ? 0.08 : 0.12);
             ctx.strokeStyle = `rgba(168, 85, 247, ${lineOpacity})`; // default connecting line color style (purple)
             ctx.lineWidth = 1;
             ctx.stroke();
@@ -158,8 +163,8 @@ export default function InteractiveBackground() {
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(mouse.x, mouse.y);
-          const lineOpacity = (1 - mdist / mouse.radius) * 0.15;
-          ctx.strokeStyle = `rgba(6, 182, 212, ${lineOpacity})`; // cyan active glow lines
+          const lineOpacity = (1 - mdist / mouse.radius) * (theme === "dark" ? 0.15 : 0.12);
+          ctx.strokeStyle = theme === "dark" ? `rgba(6, 182, 212, ${lineOpacity})` : `rgba(14, 116, 144, ${lineOpacity})`; // cyan active glow lines
           ctx.lineWidth = 1.2;
           ctx.stroke();
         }
@@ -176,7 +181,7 @@ export default function InteractiveBackground() {
       window.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [theme]);
 
   return (
     <canvas

@@ -97,7 +97,7 @@ export default function Hero() {
                 style={{ display: "inline-block" }}
                 className="bg-gradient-to-r from-cyan-400 via-purple-500 to-emerald-400 bg-clip-text text-transparent"
               >
-                Hirusha
+                Hirusha Ashinshana
               </motion.span>
             </motion.h1>
 
@@ -194,7 +194,7 @@ export default function Hero() {
                 <div className="pl-4">
                   <div>
                     <span className="text-cyan-400">"name"</span>
-                    <span className="text-pink-400">:</span> <span className="text-amber-300">"Hirusha"</span>,
+                    <span className="text-pink-400">:</span> <span className="text-amber-300">"Hirusha Ashinshana"</span>,
                   </div>
                   <div>
                     <span className="text-cyan-400">"status"</span>

@@ -7,8 +7,15 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import InteractiveBackground from "./components/InteractiveBackground";
+import { Theme } from "./types";
 
 export default function App() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const stored = localStorage.getItem("hirusha-theme") as Theme;
+    if (stored) return stored;
+    return "dark";
+  });
+
   const [activeSection, setActiveSection] = useState("hero");
 
   const { scrollYProgress } = useScroll();
@@ -19,10 +26,14 @@ export default function App() {
   });
 
   useEffect(() => {
-    // Ensure "dark" is always present on document element for dark mode selection and classes
+    localStorage.setItem("hirusha-theme", theme);
     const root = document.documentElement;
-    root.classList.add("dark");
-  }, []);
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [theme]);
 
   // Observer to track which section is currently on screen for the navbar
   useEffect(() => {
@@ -56,8 +67,12 @@ export default function App() {
     };
   }, []);
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
   return (
-    <div className="dark bg-[#050505] text-slate-200">
+    <div className={theme === "dark" ? "dark bg-[#050505] text-slate-200" : "bg-slate-50 text-slate-800"}>
       {/* Fixed Scroll Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-emerald-400 origin-[0%] z-[100]"
@@ -65,12 +80,12 @@ export default function App() {
       />
 
       {/* Interactive canvas particles network */}
-      <InteractiveBackground />
+      <InteractiveBackground theme={theme} />
 
       {/* Main Container */}
       <div className="relative min-h-screen flex flex-col justify-between selection:bg-cyan-500/30">
         {/* Navigation Bar */}
-        <Navbar activeSection={activeSection} />
+        <Navbar theme={theme} toggleTheme={toggleTheme} activeSection={activeSection} />
 
         {/* Content Layout Panels */}
         <main className="flex-grow">

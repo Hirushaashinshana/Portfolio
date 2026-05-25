@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { Theme } from "../types";
 
 interface NavbarProps {
+  theme: Theme;
+  toggleTheme: () => void;
   activeSection: string;
 }
 
@@ -13,7 +16,7 @@ const navItems = [
   { id: "contact", label: "Get In Touch" },
 ];
 
-export default function Navbar({ activeSection }: NavbarProps) {
+export default function Navbar({ theme, toggleTheme, activeSection }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -38,7 +41,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
       id="navbar-header"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "py-3 bg-[#050505]/75 backdrop-blur-xl border-b border-white/5"
+          ? "py-3 bg-white/70 dark:bg-[#050505]/70 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5"
           : "py-5 bg-transparent"
       }`}
     >
@@ -61,7 +64,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
             style={{ display: "inline-block" }}
             className="bg-gradient-to-r from-cyan-500 via-purple-500 to-emerald-400 bg-clip-text text-transparent"
           >
-            Hirusha.
+            Hirusha Ashinshana.
           </motion.span>
         </button>
 
@@ -73,15 +76,15 @@ export default function Navbar({ activeSection }: NavbarProps) {
               onClick={() => handleNavClick(item.id)}
               className={`relative px-4 py-2 text-sm font-medium tracking-wide transition-all duration-300 rounded-lg group focus:outline-none ${
                 activeSection === item.id
-                  ? "text-white"
-                  : "text-slate-400 hover:text-white"
+                  ? "text-slate-900 dark:text-white"
+                  : "text-slate-550 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               <span className="relative z-10">{item.label}</span>
               {activeSection === item.id && (
                 <motion.span
                   layoutId="activeNavIndicator"
-                  className="absolute inset-0 bg-white/5 rounded-lg -z-0 border border-white/10"
+                  className="absolute inset-0 bg-slate-100 dark:bg-white/5 rounded-lg -z-0 border border-slate-200/50 dark:border-white/10"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -91,13 +94,32 @@ export default function Navbar({ activeSection }: NavbarProps) {
               )}
             </button>
           ))}
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            id="theme-toggler-desktop"
+            className="p-2 ml-4 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-slate-200 transition-colors duration-200 border border-slate-200/50 dark:border-white/10 focus:outline-none cursor-pointer"
+            title="Toggle theme"
+          >
+            {theme === "dark" ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} />}
+          </button>
         </nav>
 
         {/* Mobile controls & toggle */}
         <div className="flex items-center md:hidden space-x-3">
+          {/* Theme Switcher for mobile */}
+          <button
+            onClick={toggleTheme}
+            id="theme-toggler-mobile"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-slate-200 border border-slate-300/50 dark:border-white/10 focus:outline-none cursor-pointer"
+          >
+            {theme === "dark" ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} />}
+          </button>
+
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg bg-white/5 text-slate-200 border border-white/10 focus:outline-none"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-slate-200 border border-slate-300/50 dark:border-white/10 focus:outline-none"
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -111,7 +133,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#050505]/95 backdrop-blur-lg border-b border-white/10"
+            className="md:hidden bg-white/95 dark:bg-[#050505]/95 backdrop-blur-lg border-b border-slate-200 dark:border-white/10"
           >
             <div className="px-4 pt-3 pb-6 space-y-2">
               {navItems.map((item) => (
@@ -120,8 +142,8 @@ export default function Navbar({ activeSection }: NavbarProps) {
                   onClick={() => handleNavClick(item.id)}
                   className={`block w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
                     activeSection === item.id
-                      ? "bg-white/10 text-white font-semibold border-l-4 border-cyan-500"
-                      : "text-slate-350 hover:bg-white/5"
+                      ? "bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white font-semibold border-l-4 border-cyan-500"
+                      : "text-slate-600 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-white/5"
                   }`}
                 >
                   {item.label}
