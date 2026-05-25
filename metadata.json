@@ -1,0 +1,6 @@
+{
+  "name": "Hirusha Portfolio",
+  "description": "Interactive developer portfolio of Hirusha - Full-Stack Developer, Data Science Enthusiast, and AI Builder.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
